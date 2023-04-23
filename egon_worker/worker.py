@@ -3,12 +3,14 @@ import multiprocessing as mp
 
 from egon import Node
 
+from egon_worker.status import Status
+
 
 class Worker:
     """Worker objects poll the load balancer for new jobs and launch them on the current machine."""
 
     @staticmethod
-    def update_status(egon_id: str, status: str, message: str = '') -> None:
+    def update_status(egon_id: str, status: Status, message: str = '') -> None:
         """Post a status update to the status API server
 
         Args:
@@ -40,7 +42,7 @@ class Worker:
                 action()
 
             except Exception:
-                cls.update_status(egon_id, 'degraded')
+                cls.update_status(egon_id, Status.DEGRADED)
 
         return wrapped
 
@@ -49,7 +51,11 @@ class Worker:
         """Wrap a ``Node`` object with update calls to the status API
 
         Args:
-            egon_id: UUID used to identify the running node  
+            egon_id: UUID used to identify the running node
+            node_class: The node class to execute
+            num_processes: The number of processes to allocate the running node
+            args: Tuple of arguments used to instantiate the node
+            kwargs: Dictionary of keyword arguments used to instantiate the node
 
         Returns:
             A wrapper function for executing the given node
@@ -63,39 +69,39 @@ class Worker:
                 wrapped_action = cls.wrap_action(egon_id, node.action)
                 processes = [mp.Process(target=wrapped_action) for _ in range(num_processes)]
 
-                cls.update_status(egon_id, 'setup')
+                cls.update_status(egon_id, Status.RUNNING)
                 node.class_setup()
 
-                cls.update_status(egon_id, 'action')
+                cls.update_status(egon_id, Status.RUNNING)
                 for proc in processes:
                     proc.start()
 
                 for proc in processes:
                     proc.join()
 
-                cls.update_status(egon_id, 'teardown')
+                cls.update_status(egon_id, Status.TEARDOWN)
                 node.teardown()
 
-            except:
-                cls.update_status(egon_id, 'failed')
+            except Exception:
+                cls.update_status(egon_id, Status.FAILED)
 
             else:
-                cls.update_status(egon_id, 'finished')
+                cls.update_status(egon_id, Status.FINISHED)
 
-        return wrapped()
+        return wrapped
 
-    def run_node(self, egon_id: str, node: type[Node], num_processes: int, args: tuple, kwargs: dict) -> None:
+    def run_node(self, egon_id: str, node_class: type[Node], num_processes: int, args: tuple, kwargs: dict) -> None:
         """Launch a node object on the local machine using the given configuration arguments
 
         Args:
             egon_id: UUID used to identify the running node
-            node: The node class to execute
+            node_class: The node class to execute
             num_processes: The number of processes to allocate the running node
             args: Tuple of arguments used to instantiate the node
             kwargs: Dictionary of keyword arguments used to instantiate the node
         """
 
-        executable = self.wrap_node(egon_id, node, num_processes, args, kwargs)
+        executable = self.wrap_node(egon_id, node_class, num_processes, args, kwargs)
         process = mp.Process(target=executable)
         process.start()
 

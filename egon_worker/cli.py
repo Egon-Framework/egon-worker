@@ -16,6 +16,7 @@ class Parser(ArgumentParser):
         subparsers = self.add_subparsers(parser_class=ArgumentParser, required=True)
 
         poll = subparsers.add_parser('poll')
+        poll.set_defaults(action=Application.poll)
         poll.add_argument(
             '-v', action='count', dest='verbose', default=0,
             help='set output verbosity to warning (-v), info (-vv), or debug (-vvv)')
@@ -36,5 +37,5 @@ class Application:
 
         parser = Parser()
         args = vars(parser.parse_args())
-        action = args.pop('actions')
+        action = args.pop('action')
         action(**args)

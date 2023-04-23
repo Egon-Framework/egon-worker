@@ -49,7 +49,10 @@ class RemoteStatusReporter(AbstractStatusReporter):
 class StatusReporter:
     """Factory class returning the appropriate reporting object based on application settings"""
 
-    def __new__(cls) -> AbstractStatusReporter:
+    def __new__(cls, remote: bool) -> AbstractStatusReporter:
         """Return a new status reporter instance"""
 
-        raise NotImplementedError()
+        if remote:
+            raise NotImplementedError('Remote status reporting is not implemented yet')
+
+        raise NotImplementedError('Local status reporting is not implemented yet')

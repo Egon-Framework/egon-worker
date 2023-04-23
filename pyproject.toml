@@ -1,0 +1,25 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "egon-worker"
+version = "0.0.0"  # Version is set automatically via CI
+authors = ["Daniel Perrefort", ]
+description = "Worker process for launching Egon nodes on the local machine."
+readme = "README.md"
+repository = "https://github.com/Egon-Framework/egon-worker"
+keywords = ["egon", "egon-worker", "egon-framework", "parallel", "multiprocessing"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+    "Typing :: Typed"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"

@@ -1,5 +1,6 @@
 """The application command line interface"""
 
+import logging
 import sys
 from argparse import ArgumentParser
 
@@ -53,7 +54,7 @@ class Application:
     def poll(*args, **kwargs) -> None:
         """Poll the load balancer for new jobs and launch them on the current machine"""
 
-        raise NotImplementedError('Polling is not implemented yet')
+        raise NotImplementedError('Polling is not implemented yet.')
 
     @classmethod
     def execute(cls) -> None:
@@ -62,4 +63,9 @@ class Application:
         parser = Parser()
         args = vars(parser.parse_args())
         action = args.pop('action')
-        action(**args)
+
+        try:
+            action(**args)
+
+        except Exception as excep:
+            logging.critical(str(excep))

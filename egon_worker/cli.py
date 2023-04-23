@@ -1,11 +1,35 @@
 """The application command line interface"""
 
+import sys
 from argparse import ArgumentParser
 
 from . import __version__
 
 
-class Parser(ArgumentParser):
+class BaseParser(ArgumentParser):
+    """Base class for creating argument parsers"""
+
+    def error(self, message: str) -> None:
+        """Exit the parser by raising a ``SystemExit`` error
+
+        This method mimics the parent class behavior except error messages
+        are included in the raised ``SystemExit`` exception. This makes for
+        easier testing/debugging.
+
+        Args:
+            message: The error message
+
+        Raises:
+            SystemExit: Every time the method is run
+        """
+
+        if len(sys.argv) <= 1:
+            self.print_help()
+
+        raise SystemExit(f'Error: {message}')
+
+
+class Parser(BaseParser):
     """Defines the command line interface and handles command line argument parsing"""
 
     def __init__(self) -> None:
@@ -13,7 +37,7 @@ class Parser(ArgumentParser):
 
         super().__init__(prog='egon-worker', description='Worker process for launching jobs from the Egon load balancer.')
         self.add_argument('--version', action='version', version=__version__)
-        subparsers = self.add_subparsers(parser_class=ArgumentParser, required=True)
+        subparsers = self.add_subparsers(parser_class=BaseParser, required=True)
 
         poll = subparsers.add_parser('poll')
         poll.set_defaults(action=Application.poll)

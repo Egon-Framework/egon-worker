@@ -1,3 +1,4 @@
 site_name: egon-worker
-nav:
-  - Overview: index.md
+plugins:
+  - search
+  - mkdocstrings

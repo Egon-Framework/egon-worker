@@ -1,3 +1,7 @@
+"""The ``status`` provides reporter class objects for interacting with the
+Egon status server.
+"""
+
 import abc
 from enum import Enum
 

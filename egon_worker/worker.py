@@ -1,3 +1,7 @@
+"""The ``worker`` module contains all logic related to spawning worker processes
+on the local machine.
+"""
+
 import functools
 import multiprocessing as mp
 

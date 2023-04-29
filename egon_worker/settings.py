@@ -1,3 +1,8 @@
+"""The ``Settings`` defines the application's settings schema, including setting
+names, descriptions, and default values.
+"""
+
+
 from pydantic import BaseSettings, Field
 
 

@@ -4,8 +4,6 @@ hide:
 - toc
 ---
 
-# Coming Soon
+egon_worker
 
-Technical documentation not available for this product yet.
-
-Rest assured publishing up-to-date documentation is a high priority and is under active development.
+::: egon_worker

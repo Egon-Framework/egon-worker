@@ -1,4 +1,4 @@
-"""The application command line interface"""
+"""The ``cli`` module defines the application's command line interface."""
 
 import logging
 import sys
@@ -8,14 +8,22 @@ from . import __version__
 
 
 class BaseParser(ArgumentParser):
-    """Base class for creating argument parsers"""
+    """Base class for creating argument parsers
+
+    This class extends/overrides the built-in ``ArgumentParser`` to provide
+    better error handling, help text formatting, etc..
+
+    Encapsulating these changes as a dedicated class (instead of directly
+    overriding methods in the default application ``Parser`` class) allows
+    subparsers to share the same behavior as their parent parser
+    (e.g., ``parent_parser.add_subparsers(parser_class=BaseParser)``).
+    """
 
     def error(self, message: str) -> None:
         """Exit the parser by raising a ``SystemExit`` error
 
-        This method mimics the parent class behavior except error messages
-        are included in the raised ``SystemExit`` exception. This makes for
-        easier testing/debugging.
+        If the parser was called without any commandline arguments, the parser
+        help text is printed before exiting.
 
         Args:
             message: The error message
@@ -48,7 +56,7 @@ class Parser(BaseParser):
 
 
 class Application:
-    """Entry point for instantiating and executing the application"""
+    """Entry point for instantiating and executing the application from the command line"""
 
     @staticmethod
     def poll(*args, **kwargs) -> None:

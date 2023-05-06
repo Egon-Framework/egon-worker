@@ -1,7 +1,13 @@
-"""The ``Settings`` defines the application's settings schema, including setting
-names, descriptions, and default values.
-"""
+"""The ``Settings`` module defines the application settings schema.
 
+Application settings are defined as attributes of the ``Settings`` class,
+including setting names, descriptions, and default values. The following
+order of priority is used when resolving application settings:
+
+  1. Commandline arguments provided at runtime
+  2. Environment variables prefixed by the string ``EGON_``
+  3. Default values defined by the ``Settings`` class
+"""
 
 from pydantic import BaseSettings, Field
 
@@ -10,7 +16,7 @@ class Settings(BaseSettings):
     """Defines the application settings schema (setting names, default values, etc.)"""
 
     class Config:
-        """Configure settings parsing options"""
+        """Configure parsing options for application settings"""
 
         env_prefix = "EGON_"
         case_sensitive = False

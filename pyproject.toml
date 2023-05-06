@@ -27,3 +27,9 @@ egon-worker = "egon_worker.cli:Application.execute"
 [tool.poetry.dependencies]
 python = "^3.8"
 pydantic = "^1.10.7"
+
+[tool.poetry.group.tests]
+optional = true
+
+[tool.poetry.group.tests.dependencies]
+coverage = "*"

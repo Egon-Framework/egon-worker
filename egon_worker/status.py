@@ -1,5 +1,9 @@
-"""The ``status`` provides reporter class objects for interacting with the
-Egon status server.
+"""The ``status`` module provides a programmatic interface for the Egon Status API.
+
+The ``RemoteStatusReporter`` class is used to report/fetch Egon job status
+to/from  the Egon Status API. If running locally, or in an environment where
+the status API is not available, the ``LocalStatusReporter`` class acts as a
+drop in replacement.
 """
 
 import abc
@@ -51,12 +55,13 @@ class RemoteStatusReporter(AbstractStatusReporter):
 
 
 class StatusReporter:
-    """Factory class returning the appropriate reporting object based on application settings"""
+    """Factory class for creating reporting objects based on application settings
 
-    def __new__(cls, remote: bool) -> AbstractStatusReporter:
+    The returned instance type is determined automatically based on current
+    application settings.
+    """
+
+    def __new__(cls) -> LocalStatusReporter | RemoteStatusReporter:
         """Return a new status reporter instance"""
-
-        if remote:
-            raise NotImplementedError('Remote status reporting is not implemented yet')
 
         raise NotImplementedError('Local status reporting is not implemented yet')

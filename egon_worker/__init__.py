@@ -1,3 +1,7 @@
+"""The Egon ``worker`` utility is responsible for spawning local processes and
+reporting their status to the Egon Status API.
+"""
+
 import importlib.metadata
 
 try:

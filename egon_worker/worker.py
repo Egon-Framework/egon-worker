@@ -51,7 +51,7 @@ class Worker:
         return wrapped
 
     @classmethod
-    def wrap_node(cls, egon_id, node_class: type[Node], num_processes: int, args: tuple, kwargs: dict) -> callable:
+    def wrap_node(cls, egon_id:str, node_class: type[Node], num_processes: int, args: tuple, kwargs: dict) -> callable:
         """Wrap a ``Node`` object with update calls to the status API
 
         Args:
